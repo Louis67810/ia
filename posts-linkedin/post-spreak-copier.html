@@ -1,0 +1,137 @@
+<title>Post Spreak particuliers</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Layout: one column, post in an editable-looking text field, one big copy button above it. */
+  :root {
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --fg: #1b1f27;
+    --muted: #5c6472;
+    --line: #d9dde4;
+    --accent: #1f4fd8;
+    --accent-fg: #ffffff;
+    --ok: #17794a;
+    --display: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12151b; --surface: #1a1e26; --fg: #eceef2; --muted: #9aa3b2;
+      --line: #2b313c; --accent: #6f93ff; --accent-fg: #0b1020; --ok: #4cc38a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12151b; --surface: #1a1e26; --fg: #eceef2; --muted: #9aa3b2;
+    --line: #2b313c; --accent: #6f93ff; --accent-fg: #0b1020; --ok: #4cc38a;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    padding-block: 24px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+  header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+  h1 { font-family: var(--display); font-size: 1.35rem; margin: 0; text-wrap: balance; }
+  p.hint { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+  button {
+    font: inherit; font-weight: 600; cursor: pointer;
+    background: var(--accent); color: var(--accent-fg);
+    border: 0; border-radius: 10px; padding: 12px 22px; min-width: 130px;
+  }
+  button:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  button.done { background: var(--ok); color: #fff; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  button.alt { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+  button.alt.done { background: var(--ok); color: #fff; border-color: var(--ok); }
+  textarea {
+    width: 100%; box-sizing: border-box; min-height: 70vh;
+    font: inherit; font-size: 1rem; line-height: 1.5;
+    background: var(--surface); color: var(--fg);
+    border: 1px solid var(--line); border-radius: 12px; padding: 16px;
+    white-space: pre-wrap; resize: vertical;
+  }
+  @media (prefers-reduced-motion: no-preference) { button { transition: background .15s; } }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Plus+Jakarta+Sans:wght@700&display=swap">
+
+<main>
+  <header>
+    <h1>Post ramen Stanley Chen</h1>
+    <div class="actions">
+      <button id="copyz" type="button">Copier pour LinkedIn</button>
+      <button id="copy" type="button" class="alt">Copier simple</button>
+    </div>
+  </header>
+  <p class="hint">Essaie d'abord « Copier pour LinkedIn » : il met un caractère invisible sur chaque ligne vide, pour que LinkedIn ne les supprime pas. Si ça ne marche pas, essaie « Copier simple ».</p>
+  <textarea id="post" readonly>Ce YouTubeur a ouvert un faux restaurant de ramen. Il servait des ramen instantanés. Et des gens ont fait la queue jusqu'à 90 minutes 🍜
+
+Il s'appelle Stanley Chen, il est australien.
+
+Avant, il avait travaillé dans un restaurant qui disait servir du frais.
+En réalité, les plats étaient préparés une semaine avant.
+
+Alors il décide de faire une expérience.
+
+Il crée un faux site.
+Il lance une promo sur TikTok.
+Il invite des influenceurs food.
+Et il sert des ramen instantanés comme dans un restaurant haut de gamme.
+
+Sa promo TikTok dépasse les 200 000 vues.
+Il finit par n'accepter que les influenceurs à plus de 100 000 abonnés.
+Et sa vidéo dépasse les 23 millions de vues.
+
+Bref.
+
+Avant même de goûter, les gens avaient déjà décidé que c'était de la qualité.
+Parce que tout ce qu'ils voyaient le disait : le site, les vidéos, l'attente.
+
+Je ne dis pas qu'il faut faire passer n'importe quoi pour autre chose.
+Mais ça montre une chose : la présentation décide de la valeur perçue avant même le produit.
+
+Ton site, c'est pareil.
+C'est la première chose qui est jugée, avant que quelqu'un goûte à ton travail.
+S'il a l'air premium, ton offre aussi. S'il a l'air bâclé, tu perds avant même d'être goûté.
+
+Et le tien, il dit quoi de ton travail ?
+
+------
+Si tu veux un site qui inspire confiance et transforme tes visiteurs en clients, réserve un appel ici : https://ruff.agency/30-min</textarea>
+</main>
+
+<script>
+  var box = document.getElementById('post');
+  function wire(btn, transform) {
+    var label = btn.textContent;
+    function ok() {
+      btn.textContent = 'Copié';
+      btn.classList.add('done');
+      setTimeout(function () { btn.textContent = label; btn.classList.remove('done'); }, 2000);
+    }
+    function fallback(text) {
+      var tmp = document.createElement('textarea');
+      tmp.value = text;
+      tmp.style.position = 'fixed'; tmp.style.opacity = '0';
+      document.body.appendChild(tmp);
+      tmp.focus(); tmp.select();
+      var done = false;
+      try { done = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(tmp);
+      if (done) { ok(); } else { btn.textContent = 'Copie refusée par le navigateur'; }
+    }
+    btn.addEventListener('click', function () {
+      var text = transform(box.value);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(ok, function () { fallback(text); });
+      } else { fallback(text); }
+    });
+  }
+  wire(document.getElementById('copy'), function (t) { return t; });
+  // Chaque ligne vide reçoit une espace de largeur nulle (U+200B) pour ne pas être supprimée par LinkedIn.
+  wire(document.getElementById('copyz'), function (t) { return t.replace(/^$/gm, '​'); });
+</script>
